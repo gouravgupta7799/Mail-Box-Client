@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import classes from './LoginSignupPage.module.css'
-const Id = 'AIzaSyDE4RuqWCbKZH-HT_vaT_x7Na_qi_1lqsA'
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AuthAction } from '../../Store/Auth-Slice';
 
+
+const Id = 'AIzaSyDPb8_eVDcDttXa2z1AZsFefzvseA_1Ba4'
 
 export default function LoginSignupPage() {
 
-  const [toggle, setToggle] = useState(false)
-  const [enterName, setEnterName] = useState('')
-  const [enteremail, setEnterEmail] = useState('')
-  const [enterpassword, setEnterPassword] = useState('')
+  const dispatech = useDispatch()
+  const navigate = useNavigate();
+  const [toggle, setToggle] = useState(false);
+  const [enterName, setEnterName] = useState('');
+  const [enteremail, setEnterEmail] = useState('');
+  const [enterpassword, setEnterPassword] = useState('');
 
   const toggleHandler = (e) => {
     setToggle(!toggle)
@@ -37,7 +43,7 @@ export default function LoginSignupPage() {
           returnSecureToken: true
         }
       }
-      
+
       const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(details),
@@ -48,7 +54,15 @@ export default function LoginSignupPage() {
       if (res.ok) {
         const data = await res.json()
         console.log(data)
-        window.alert('LogIn Successful !!!')
+        if (data.idToken && data.email) {
+          dispatech(AuthAction.loginHandler({ idToken: data.idToken, email: data.email }))
+          window.alert('LogIn Successful !!!')
+          setTimeout(() => {
+            navigate('/home')
+          }, 2000)
+        } else {
+          console.log('error to login')
+        }
 
       } else {
         return res.json().then((data) => window.alert(data.error.message))
@@ -71,7 +85,7 @@ export default function LoginSignupPage() {
 
                   <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">{toggle ? `Sign up` : `Log In`}</p>
 
-                  <form className="mx-1 mx-md-4" onSubmit={submitHandler}>
+                  <form className="mx-1 mx-md-4" onSubmit={submitHandler} style={{ minHeight: '60vh' }}>
 
                     <div className="d-flex flex-row align-items-center mb-4">
                       <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
