@@ -5,6 +5,6 @@ import classes from './Home.module.css';
 
 export default function homePage() {
   return (
-    <div>homePage</div>
+    <div>"Welcome to your mail box"</div>
   )
 }

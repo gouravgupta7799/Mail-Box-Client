@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import classes from './LoginSignupPage.module.css'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AuthAction } from '../../Store/Auth-Slice';
 
 
-const Id = 'AIzaSyDPb8_eVDcDttXa2z1AZsFefzvseA_1Ba4'
+const Id = ''
 
 export default function LoginSignupPage() {
 
@@ -15,6 +15,7 @@ export default function LoginSignupPage() {
   const [enterName, setEnterName] = useState('');
   const [enteremail, setEnterEmail] = useState('');
   const [enterpassword, setEnterPassword] = useState('');
+  const [confirmPassword, setconfirmPassword] = useState('');
 
   const toggleHandler = (e) => {
     setToggle(!toggle)
@@ -34,7 +35,7 @@ export default function LoginSignupPage() {
           returnSecureToken: true,
         }
 
-      } else {
+      } else if (confirmPassword === enterpassword) {
         url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${Id}`
         details = {
           email: enteremail,
@@ -42,6 +43,8 @@ export default function LoginSignupPage() {
           userName: enterName,
           returnSecureToken: true
         }
+      } else {
+        throw new Error('please check password')
       }
 
       const res = await fetch(url, {
@@ -85,8 +88,16 @@ export default function LoginSignupPage() {
 
                   <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">{toggle ? `Sign up` : `Log In`}</p>
 
-                  <form className="mx-1 mx-md-4" onSubmit={submitHandler} style={{ minHeight: '60vh' }}>
+                  <form className="mx-1 mx-md-4" onSubmit={submitHandler} style={{ minHeight: '70vh' }}>
 
+                    {toggle ? <div className="d-flex flex-row align-items-center mb-4">
+                      <i className="fas fa-user fa-lg me-3 fa-fw"></i>
+                      <div className="form-outline flex-fill mb-0">
+                        <label className="form-label" htmlFor="form3Example1c">Your Name</label>
+                        <input type="text" id="form3Example1c" className="form-control" value={enterName} onChange={(e) => setEnterName(e.target.value)} required />
+                      </div>
+                    </div> : ''}
+                    
                     <div className="d-flex flex-row align-items-center mb-4">
                       <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                       <div className="form-outline flex-fill mb-0">
@@ -105,21 +116,19 @@ export default function LoginSignupPage() {
                     {toggle ? <div className="d-flex flex-row align-items-center mb-4">
                       <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                       <div className="form-outline flex-fill mb-0">
-                        <label className="form-label" htmlFor="form3Example1c">Your Name</label>
-                        <input type="text" id="form3Example1c" className="form-control" value={enterName} onChange={(e) => setEnterName(e.target.value)} required />
-
+                        <label className="form-label" htmlFor="form3Example1c">Confirm Password</label>
+                        <input type="password" id="form3Example1c" className="form-control" value={confirmPassword} onChange={(e) => setconfirmPassword(e.target.value)} required />
                       </div>
-                    </div> : <div className="form-check d-flex justify-content-center mb-5">
-                      <input className="form-check-input me-2" type="checkbox" value="" id="form2Example3c" />
-                      <label className="form-check-label" htmlFor="form2Example3">
-                      </label>
-                    </div>}
+                    </div> : ''}
 
                     <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                       <button type="submit" className="btn btn-primary btn-lg" disabled={!enterpassword ^ !enteremail}>{toggle ? `Register` : `LogIn`}</button>
                     </div>
 
                   </form>
+                  
+                  <Link to='/forgetPassword' className={classes['toggle']} style={{ textDecoration: 'none' }}>Forget Passsword</Link>
+
                   <div className={classes['already']} onClick={toggleHandler}>
                     <div className='d-flex justify-content-center mt-3'><p>{toggle ? `Have an Account ? LogIn` : 'New Here ? Register'}</p></div>
                   </div>
