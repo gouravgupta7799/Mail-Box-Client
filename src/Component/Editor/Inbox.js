@@ -11,7 +11,7 @@ const Inbox = () => {
   const userData = useSelector((state) => state.user);
   let badge = 0;
 
-  setTimeout(async () => {
+  setInterval(async () => {
     const res = await fetch(
       `https://mailboxclient-dc189-default-rtdb.firebaseio.com/${userData.localId}/mailRecived.json`
     )
