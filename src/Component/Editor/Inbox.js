@@ -12,18 +12,15 @@ const Inbox = () => {
   let badge = 0;
 
   setTimeout(async () => {
-    await fetch(
+    const res = await fetch(
       `https://mailboxclient-dc189-default-rtdb.firebaseio.com/${userData.localId}/mailRecived.json`
     )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return res.json().then((data) => window.alert(data.error.message));
-        }
-      })
-      .then((res) => dispatch(userAction.mailDataRecivedUpdater(res)))
-      .catch((err) => console.log(err));
+    if (res.ok) {
+      const data = await res.json();
+      dispatch(userAction.mailDataRecivedUpdater(data))
+    } else {
+      return res.json().then((data) => window.alert(data.error.message));
+    }
   }, 2000);
 
   let key;
@@ -42,9 +39,9 @@ const Inbox = () => {
       <div className="col-md-9">
         <div className="row">
           <div className="col-sm-6">
-            <span class="btn btn-primary">
-              <span class="badge badge-dark bg-danger">{badge}</span>
-              <span class="sr-only">unread messages</span>
+            <span className="btn btn-primary">
+              <span className="badge badge-dark bg-danger">{badge}</span>
+              <span className="sr-only">unread messages</span>
             </span>
           </div>
 

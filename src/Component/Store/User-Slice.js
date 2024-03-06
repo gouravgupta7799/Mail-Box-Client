@@ -1,38 +1,44 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const userState ={
-    localId:'',
-    token:'',
-    isLoggedIn : false,
-    mailDataRecived:[],
-    mailDataSent:[],
-    toggle:false
+const intitalToken = localStorage.getItem('token');
+
+const userState = {
+    localId: '',
+    idToken: intitalToken,
+    isLoggedIn: !!intitalToken,
+    mailDataRecived: [],
+    mailDataSent: [],
+    toggle: false
 }
 
 const userReducer = createSlice({
-    name:'user',
-    initialState:userState,
-    reducers:{
-        tokenUpdater(state,action){
-            state.token = action.payload
+    name: 'user',
+    initialState: userState,
+    reducers: {
+        tokenUpdater(state, action) {
+            localStorage.setItem('token', action.payload)
+            state.isLoggedIn = true;
         },
-        loggedInUpdater(state){
-            state.isLoggedIn = ! state.isLoggedIn
+        logoutHandler(state, action) {
+            state.idToken = null;
+            localStorage.removeItem('token');
+            state.isLoggedIn = false;
+            state.localId = action.payload;
         },
-        localIdUpdater(state, action){
+        localIdUpdater(state, action) {
             state.localId = action.payload
         },
-        mailDataRecivedUpdater(state,action){
-            state.mailDataRecived=action.payload
+        mailDataRecivedUpdater(state, action) {
+            state.mailDataRecived = action.payload
         },
-        mailDataSentUpdater(state, action){
+        mailDataSentUpdater(state, action) {
             state.mailDataSent = action.payload
         },
-        toggleUpdater(state){
-            state.toggle=!state.toggle
+        toggleUpdater(state) {
+            state.toggle = !state.toggle
         }
     }
 })
 
-export const  userAction = userReducer.actions
+export const userAction = userReducer.actions
 export default userReducer.reducer

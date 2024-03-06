@@ -10,20 +10,17 @@ const Sentmail = () => {
 
   useEffect(() => {
     (async () => {
-      await fetch(
+      const res = await fetch(
         `https://mailboxclient-dc189-default-rtdb.firebaseio.com/${userData.localId}/mailSent.json`
       )
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          } else {
-            return res.json().then((data) => window.alert(data.error.message));
-          }
-        })
-        .then((res) => dispatch(userAction.mailDataSentUpdater(res)))
-        .catch((err) => console.log(err));
+      if (res.ok) {
+        const data = await res.json();
+        dispatch(userAction.mailDataSentUpdater(data))
+      } else {
+        return res.json().then((data) => window.alert(data.error.message));
+      }
     })();
-    return () => {};
+    return () => { };
   }, [userData.toggle]);
   let key;
   if (userData.mailDataSent) {
@@ -79,7 +76,7 @@ const Sentmail = () => {
             <tbody>
               {key?.map((item) => {
                 return (
-                  <tr className={classes.trow}>
+                  <tr className={classes.trow} >
                     <td className="action">
                       <i className="fa fa-star-o"></i>
                     </td>
