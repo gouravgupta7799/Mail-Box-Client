@@ -93,7 +93,5 @@ export default function MailEditor() {
       </div>
     </div>
 
-
-
   )
 }

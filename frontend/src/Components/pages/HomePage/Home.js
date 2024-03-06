@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Home.module.css';
-import MailEditor from '../../Editor/MailEditor';
+import MailEditor from '../Editor/MailEditor';
 
 
 

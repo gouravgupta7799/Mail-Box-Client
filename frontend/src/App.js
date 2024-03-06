@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginSignupPage from './Components/pages/LoginSignup/LoginSignupPage';
 import HomePage from './Components/pages/HomePage/Home'
 import { useSelector } from 'react-redux';
+import Inbox from './Components/pages/Editor/Inbox';
 
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
         <Routes>
           <Route path='/' element={<LoginSignupPage />} />
           <Route path='/home' element={isLoggedIn ? <HomePage /> : <LoginSignupPage />} />
-          <Route path='/forgetPassword' element={<HomePage />} />
+          <Route path='/forgetPassword' element={<Inbox />} />
 
         </Routes>
 
